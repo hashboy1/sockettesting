@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -14,11 +15,11 @@ import org.apache.log4j.Logger;
 import com.socketServer.util.SystemUtil;
 
 
-public class SocketServerThreadPool 
+public class SocketServerFurtureThreadPool 
 {   
 	
 	private static int port=8091;
-	public static Logger logger1 = Logger.getLogger(SocketServerThreadPool.class);
+	public static Logger logger1 = Logger.getLogger(SocketServerFurtureThreadPool.class);
 	
     public static void main( String[] args ) throws Exception
     {
@@ -35,8 +36,11 @@ public class SocketServerThreadPool
         {
 	        Socket so=ss.accept();
 	        System.out.println("client address:"+so.getInetAddress());    
-	        tpe.execute(new SocketServerHandler(so));          
+	        FutureTask<String> ft=new FutureTask<String>(new SocketServerCallableHandler(so));
+	        tpe.submit(ft);
+	        logger1.info("Message Summary:"+ft.get());
         }
+        
         
     }
 }

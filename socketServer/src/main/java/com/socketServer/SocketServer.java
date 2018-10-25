@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.log4j.Logger;
+
 import com.socketServer.util.SystemUtil;
 
 
@@ -15,13 +17,14 @@ public class SocketServer
 	private static int port=8091;
 	
     public static void main( String[] args ) throws Exception
-    {
+    {   
+    	Logger logger1 = Logger.getLogger("Main Function");
         ServerSocket ss=new ServerSocket(port);
         System.out.println("server startup at "+port);
         while (true)
         {
 	        Socket so=ss.accept();
-	        System.out.println("client address:"+so.getInetAddress());
+	        logger1.info("client address:"+so.getInetAddress());
 	        
 	        
 	        
@@ -31,7 +34,7 @@ public class SocketServer
 	        if (is.read(data) != -1)
 	        {
 	        	String outputcontent=new String(data);
-	        	System.out.println(SystemUtil.getSystemDate()+"   Server side data received:"+outputcontent);
+	        	logger1.info(SystemUtil.getSystemDate()+"   Server side data received:"+outputcontent);
 	        }
 	        
 	       
